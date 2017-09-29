@@ -1,0 +1,40 @@
+<h3>Calculate aspect ratio</h3>
+<div id="calcaspect">
+<p class="description">Is it 16 by 9? Handy tool which provides the missing value if only height or width can be provided.</p>
+<script type="text/javascript">
+function resolveaspect() {
+	var mywidth = Math.round(document.getElementById('givenwidth').value)
+	var myheight = Math.round(document.getElementById('givenheight').value)
+	var optimalheight = 0
+	var optimalwidth = 0
+	var calcfeedb = ''
+	document.getElementById('calcfeedback').innerHTML = calcfeedb
+	if (mywidth == '' && myheight == '') {document.getElementById('calcfeedback').innerHTML = 'Please provide width or height.'; return}
+
+	if (mywidth == '') {console.log('resolving for x...')
+                optimalwidth = Math.round((16/9)*myheight)
+		document.getElementById('givenwidth').value = optimalwidth
+		mywidth = Math.round((16/9)*(myheight-28))
+		optimalheight = Math.round(((9/16)*optimalwidth)+28) // using other-than-provided width to compute height
+		calcfeedb = 'Taking into account 28 vertical pixels for control bar, use ' + mywidth + 'x' + myheight + ' or ' + optimalwidth + "x" + optimalheight + '.'
+		console.log('done.')
+	} else if (myheight == '') {console.log('resolving for y...')
+                optimalheight = Math.round((9/16)*mywidth)
+		document.getElementById('givenheight').value = optimalheight
+		myheight = Math.round(((9/16)*mywidth))+28
+		optimalwidth = Math.round(((16/9)*(optimalheight-28))) // using other-than-provided height to compute width
+		calcfeedb='Taking into account 28 vertical pixels for control bar, use ' + mywidth + 'x' + myheight + ' or ' + optimalwidth + 'x' + optimalheight + '.'
+		console.log('done.')
+	} else {console.log('both width and height are provided, providing general feedback.')
+		if (Math.round(mywidth/myheight) < (16/9)) {calcfeedb = 'Somewhat portrait mode. Increase width or decrease height to get 16:9 aspect ratio.'}
+		else if (Math.round(mywidth/myheight) > (16/9)) {calcfeedb = 'Somewhat landscape mode. Decrease width or increase height to get 16:9 aspect ratio.'}
+		else {calcfeedb = 'Spot on. 16:9 aspect ratio. :-)'}
+	}
+	document.getElementById('calcfeedback').innerHTML = calcfeedb;
+}
+</script>
+<p>This tool will calculate width or height for a 16:9 aspect ratio.</p>
+<form><p>Please enter width <input type="number" name="width" id="givenwidth" style="width:4em;"> or height <input type="number" name="height" id="givenheight" style="width:4em;">. <input type="button" onclick="resolveaspect()" value="calculate"><input type="button" onclick="javascript:document.getElementById('givenwidth').value='';document.getElementById('givenheight').value='';" value="clear" style="background-color:#bbbbbb;"></p></form>
+<p id="calcfeedback"></p>
+</div>
+
